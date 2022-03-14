@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
+import './Thumbnail.css';
 
 function Thumbnail({ image, title }) {
   return (
-    <a href="#todo">
+    <a href="#todo" className="thumbnail-component">
       <img src={image} alt={title} />
-      <div>{title}</div>
+      <div className="title">{title}</div>
     </a>
   );
 }
