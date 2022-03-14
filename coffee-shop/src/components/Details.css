@@ -1,0 +1,16 @@
+.details-component {
+  padding: 10px;
+}
+
+.details-component .details-box {
+  padding: 5px 20px;
+}
+
+.details-component h2 {
+  margin: 0 0 10px 0;
+}
+
+.details-component img {
+  max-width: 400px;
+  max-height: 400px;
+}
