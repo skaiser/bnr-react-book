@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom';
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { itemImages } from '../items';
 import Thumbnail from './Thumbnail';
 import './Details.css';
 
-function Details({ items }) {
-  const { id } = useParams();
+function Details({ items, id, addToCart }) {
   const detailItem = items.find((item) => item.id === id);
   const otherItems = items.filter((item) => item.id !== id);
 
@@ -33,6 +33,11 @@ function Details({ items }) {
             />
             {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
             <div>Price: ${detailItem.price.toFixed(2)}</div>
+            <div>
+              <button type="button" onClick={() => addToCart(detailItem.id)}>
+                Add to Cart
+              </button>
+            </div>
           </>
         ) : (
           <h2>Unknown Item</h2>
@@ -42,7 +47,8 @@ function Details({ items }) {
   );
 }
 
-Details.propTypes = {
+const sharedProps = {
+  addToCart: PropTypes.func.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -53,4 +59,21 @@ Details.propTypes = {
   ).isRequired,
 };
 
-export default Details;
+// All this mess to prevent rerenders.
+// https://reactbook.bignerdranch.com/5-coffee-shop/07-add-to-cart/#prevent-changes
+Details.propTypes = {
+  ...sharedProps,
+  id: PropTypes.string.isRequired,
+};
+
+const DetailsMemo = memo(Details);
+
+function DetailsOuter({ addToCart, items }) {
+  const { id } = useParams();
+
+  return <DetailsMemo addToCart={addToCart} id={id} items={items} />;
+}
+
+DetailsOuter.propTypes = sharedProps;
+
+export default DetailsOuter;
