@@ -27,9 +27,31 @@ function Cart({ cart, items, dispatch }) {
                   <td>{item.quantity}</td>
                   <td>{items.find((i) => i.id === item.id).title}</td>
                   <td>
-                    {`$${(
-                      item.quantity * items.find((i) => i.id === item.id).price
-                    ).toFixed(2)}`}
+                    <div className="quantity">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          dispatch({
+                            type: CartTypes.DECREASE,
+                            itemId: item.id,
+                          });
+                        }}
+                      >
+                        -
+                      </button>
+                      {`$${(item.quantity * items.find((i) => i.id === item.id).price).toFixed(2)}`}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          dispatch({
+                            type: CartTypes.ADD,
+                            itemId: item.id,
+                          });
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
                   </td>
                   <td>
                     <button
