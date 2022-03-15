@@ -10,10 +10,10 @@ function Header({ cart }) {
       <h1>
         <Link to="/">Coffee Shop</Link>
       </h1>
-      <a className="cart" href="#todo">
+      <Link className="cart" to="/cart">
         <img src={CartIcon} alt="cart icon" />
         <div className="badge">{cartQuantity}</div>
-      </a>
+      </Link>
     </header>
   );
 }

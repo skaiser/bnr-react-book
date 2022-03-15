@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useCallback } from 'react';
 import './App.css';
+import Cart from './components/Cart';
 import Details from './components/Details';
 import Header from './components/Header';
 import Home from './components/Home';
@@ -19,6 +20,10 @@ function App() {
     <Router>
       <Header cart={cart} />
       <Routes>
+        <Route
+          path="/cart"
+          element={<Cart cart={cart} items={items} dispatch={dispatchCart} />}
+        />
         <Route
           path="/details/:id"
           element={<Details addToCart={addToCart} items={items} />}
