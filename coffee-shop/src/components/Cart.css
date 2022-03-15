@@ -11,5 +11,11 @@
   width: 100px;
 }
 
-.cart-component .quantity button {
+.cart-component label {
+  display: block;
+}
+
+.cart-component form input {
+  margin: 5px;
+  padding: 2px;
 }
