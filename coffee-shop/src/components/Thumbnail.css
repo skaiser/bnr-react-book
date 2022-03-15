@@ -2,7 +2,9 @@
   background: var(--dark-bg);
   border-radius: 15px;
   box-sizing: border-box;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
   position: relative;
   width: 100%;

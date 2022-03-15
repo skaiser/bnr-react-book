@@ -1,6 +1,7 @@
 :root {
   --dark-bg: #080c14;
   --normal-bg: #282c34;
+  --header-height: 100px;
 }
 
 body {
