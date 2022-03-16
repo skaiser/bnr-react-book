@@ -22,6 +22,7 @@ export const itemImages = {
   wine: Wine,
 };
 
+// Deprecated in favor of using the /api/items endpoint.
 export const items = [
   {
     id: 'apple',
