@@ -1,13 +1,29 @@
 import axios from 'axios';
 import { useState, useRef, useMemo } from 'react';
+import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import './Cart.css';
 import { CartTypes } from '../reducers/cartReducer';
+
+const customModalStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    color: '#000',
+  },
+};
+
+Modal.setAppElement('#root');
 
 function Cart({ cart, items, dispatch }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [zipCode, setZipCode] = useState('');
+  const [thankYouOpen, setThankYouOpen] = useState(false);
   const zipRef = useRef();
 
   const subTotal = cart.reduce((acc, item) => {
@@ -54,16 +70,31 @@ function Cart({ cart, items, dispatch }) {
         zipCode,
       })
       .then(() => {
-        console.log('Order Submitted');
         dispatch({ type: CartTypes.EMPTY });
+        setThankYouOpen(true);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
+  const closeThankYouModal = () => {
+    setThankYouOpen(false);
+  };
+
   return (
     <div className="cart-component">
+      <Modal
+        isOpen={thankYouOpen}
+        onRequestClose={closeThankYouModal}
+        style={customModalStyles}
+        contentLabel="Thanks for your order"
+      >
+        <p>Thanks for your order!</p>
+        <button onClick={closeThankYouModal} type="button">
+          Close
+        </button>
+      </Modal>
       <h2>Your Cart</h2>
       {cart?.length > 0 ? (
         <>
