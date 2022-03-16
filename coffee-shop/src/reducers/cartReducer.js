@@ -4,6 +4,7 @@ const initialCart = [];
 
 export const CartTypes = {
   ADD: 'ADD',
+  EMPTY: 'EMPTY',
   REMOVE: 'REMOVE',
   DECREASE: 'DECREASE',
 };
@@ -32,6 +33,8 @@ const cartReducer = (state, action) => {
         });
       }
       return [...state, { id: action.itemId, quantity: 1 }];
+    case CartTypes.EMPTY:
+      return [];
     case CartTypes.REMOVE:
       return state.filter((item) => item.id !== action.itemId);
     default:

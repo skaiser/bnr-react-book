@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import './Cart.css';
@@ -41,6 +42,24 @@ function Cart({ cart, items, dispatch }) {
     if (digits.length === 10) {
       zipRef.current.focus();
     }
+  };
+
+  const submitOrder = (event) => {
+    event.preventDefault();
+    axios
+      .post('/api/orders', {
+        items: cart,
+        name,
+        phone,
+        zipCode,
+      })
+      .then(() => {
+        console.log('Order Submitted');
+        dispatch({ type: CartTypes.EMPTY });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -119,7 +138,7 @@ function Cart({ cart, items, dispatch }) {
             <div>Enter Zip Code to get total</div>
           )}
           <h3>Checkout</h3>
-          <form>
+          <form onSubmit={submitOrder}>
             <label htmlFor="name">
               Name:
               {/* eslint-disable jsx-a11y/no-autofocus */}
