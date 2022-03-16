@@ -25,6 +25,7 @@ function Cart({ cart, items, dispatch }) {
   const [phone, setPhone] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [thankYouOpen, setThankYouOpen] = useState(false);
+  const [apiError, setApiError] = useState('');
   const zipRef = useRef();
   const navigate = useNavigate();
 
@@ -77,12 +78,17 @@ function Cart({ cart, items, dispatch }) {
       })
       .catch((error) => {
         console.error(error);
+        setApiError(error?.response?.data?.error || 'Unknown Error');
       });
   };
 
   const closeThankYouModal = () => {
     setThankYouOpen(false);
     navigate('/');
+  };
+
+  const closeApiErrorModal = () => {
+    setApiError('');
   };
 
   return (
@@ -96,6 +102,19 @@ function Cart({ cart, items, dispatch }) {
         <p>Thanks for your order!</p>
         <button onClick={closeThankYouModal} type="button">
           Return home
+        </button>
+      </Modal>
+      <Modal
+        isOpen={!!apiError}
+        onRequestClose={closeApiErrorModal}
+        style={customModalStyles}
+        contentLabel="There was an error"
+      >
+        <p>There was an error submitting your order.</p>
+        <p>{apiError}</p>
+        <p>Please try again.</p>
+        <button onClick={closeApiErrorModal} type="button">
+          Ok
         </button>
       </Modal>
       <h2>Your Cart</h2>
