@@ -4,22 +4,10 @@ import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { CartTypes } from '../reducers/cartReducer';
+import customModalStyles from '../styles/modalCustomStyles';
 import './Cart.css';
 
-const customModalStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    color: '#000',
-  },
-};
-
 Modal.setAppElement('#root');
-
 function Cart({ cart, items, dispatch }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
