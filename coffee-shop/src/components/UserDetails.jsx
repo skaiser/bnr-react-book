@@ -25,6 +25,7 @@ function UserDetails() {
       {userDetails.username ? (
         <div>
           {`Welcome, ${userDetails.username}`}
+          {userDetails.access === 'associate' && <Link to="/orders">Orders</Link>}
           <button type="button" onClick={logout}>
             Logout
           </button>

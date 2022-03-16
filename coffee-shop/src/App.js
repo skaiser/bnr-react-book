@@ -9,6 +9,7 @@ import Details from './components/Details';
 import Header from './components/Header';
 import Home from './components/Home';
 import Login from './components/Login';
+import Orders from './components/Orders';
 import PageNotFound from './components/PageNotFound';
 import UserContext from './context/UserContext';
 import { CartTypes, useCartReducer } from './reducers/cartReducer';
@@ -45,6 +46,7 @@ function App() {
         const result = await axios.get('/api/auth/current-user');
         setUserDetails(result.data || {});
       } catch (error) {
+        console.error(error);
         setApiError(error?.response?.data?.error || 'Unknown Error');
       }
     };
@@ -84,6 +86,7 @@ function App() {
             <Route path="/cart" element={<Cart cart={cart} items={items} dispatch={dispatchCart} />} />
             <Route path="/details/:id" element={<Details addToCart={addToCart} items={items} />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/orders" element={<Orders items={items} />} />
             <Route path="/" element={<Home items={items} />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
