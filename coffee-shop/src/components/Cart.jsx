@@ -2,8 +2,9 @@ import axios from 'axios';
 import { useState, useRef, useMemo } from 'react';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
-import './Cart.css';
+import { useNavigate } from 'react-router-dom';
 import { CartTypes } from '../reducers/cartReducer';
+import './Cart.css';
 
 const customModalStyles = {
   content: {
@@ -25,6 +26,7 @@ function Cart({ cart, items, dispatch }) {
   const [zipCode, setZipCode] = useState('');
   const [thankYouOpen, setThankYouOpen] = useState(false);
   const zipRef = useRef();
+  const navigate = useNavigate();
 
   const subTotal = cart.reduce((acc, item) => {
     const details = items.find((i) => i.id === item.id);
@@ -80,6 +82,7 @@ function Cart({ cart, items, dispatch }) {
 
   const closeThankYouModal = () => {
     setThankYouOpen(false);
+    navigate('/');
   };
 
   return (
@@ -92,7 +95,7 @@ function Cart({ cart, items, dispatch }) {
       >
         <p>Thanks for your order!</p>
         <button onClick={closeThankYouModal} type="button">
-          Close
+          Return home
         </button>
       </Modal>
       <h2>Your Cart</h2>
