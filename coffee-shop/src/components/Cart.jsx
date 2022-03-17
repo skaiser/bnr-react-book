@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { useState, useRef, useMemo } from 'react';
+// eslint-disable-next-line object-curly-newline
+import { useState, useRef, useMemo, useEffect } from 'react';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +9,40 @@ import customModalStyles from '../styles/modalCustomStyles';
 import './Cart.css';
 
 Modal.setAppElement('#root');
+
+function Select({ options, onChange, initialValue = 0 }) {
+  const [value, setValue] = useState(initialValue);
+
+  /*
+   * Update the element value if initialValue was changed outside of
+   * this component (e.g., from CartTypes.ADD or CartTypes.DECREASE events).
+   */
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    onChange(event.target.value);
+  };
+
+  return (
+    <select value={value} onChange={handleChange}>
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+Select.propTypes = {
+  initialValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  options: PropTypes.arrayOf(PropTypes.number).isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
 function Cart({ cart, items, dispatch }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -120,8 +155,6 @@ function Cart({ cart, items, dispatch }) {
             <tbody>
               {cart.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.quantity}</td>
-                  <td>{items.find((i) => i.id === item.id).title}</td>
                   <td>
                     <div className="quantity">
                       <button
@@ -135,7 +168,14 @@ function Cart({ cart, items, dispatch }) {
                       >
                         -
                       </button>
-                      {`$${(item.quantity * items.find((i) => i.id === item.id).price).toFixed(2)}`}
+                      <Select
+                        initialValue={item.quantity}
+                        options={[...Array(15).keys()]}
+                        onChange={(quantity) => {
+                          const type = quantity > 0 ? CartTypes.SET_QUANTITY : CartTypes.REMOVE;
+                          dispatch({ type, itemId: item.id, quantity });
+                        }}
+                      />
                       <button
                         type="button"
                         onClick={() => {
@@ -149,6 +189,8 @@ function Cart({ cart, items, dispatch }) {
                       </button>
                     </div>
                   </td>
+                  <td>{items.find((i) => i.id === item.id).title}</td>
+                  <td>{`$${(item.quantity * items.find((i) => i.id === item.id).price).toFixed(2)}`}</td>
                   <td>
                     <button
                       type="button"

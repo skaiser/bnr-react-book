@@ -7,6 +7,7 @@ export const CartTypes = {
   EMPTY: 'EMPTY',
   REMOVE: 'REMOVE',
   DECREASE: 'DECREASE',
+  SET_QUANTITY: 'SET_QUANTITY',
 };
 
 const findItem = (cart, itemId) => cart.find((item) => item.id === itemId);
@@ -37,6 +38,19 @@ const cartReducer = (state, action) => {
       return [];
     case CartTypes.REMOVE:
       return state.filter((item) => item.id !== action.itemId);
+    case CartTypes.SET_QUANTITY: {
+      if (findItem(state, action.itemId)) {
+        return state.map((item) => {
+          if (item.id !== action.itemId) {
+            return item;
+          }
+          const quantity = Number(action.quantity) > 0 ? Number(action.quantity) : 0;
+          return { ...item, quantity };
+        });
+      }
+
+      return [...state, { id: action.itemId, quantity: 1 }];
+    }
     default:
       throw new Error(`cartReducer: Invalid action type ${action.type}`);
   }
