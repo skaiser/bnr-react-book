@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
@@ -6,14 +6,17 @@ import UserContext from '../context/UserContext';
 import customModalStyles from '../styles/modalCustomStyles';
 import './Login.css';
 
-Modal.setAppElement('#root');
-
 function Login() {
   const { setUserDetails } = useContext(UserContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [apiError, setApiError] = useState('');
   const navigate = useNavigate();
+
+  // Set here to allow tests to pass due to async app rendering.
+  useEffect(() => {
+    Modal.setAppElement('#root');
+  }, []);
 
   const login = (event) => {
     event.preventDefault();

@@ -4,7 +4,7 @@ import './Thumbnail.css';
 
 function Thumbnail({ id, image, title }) {
   return (
-    <Link to={`/details/${id}`} className="thumbnail-component">
+    <Link to={`/details/${id}`} className="thumbnail-component" data-testid="thumbnail-component">
       <img src={image} alt={title} />
       <div className="title">{title}</div>
     </Link>

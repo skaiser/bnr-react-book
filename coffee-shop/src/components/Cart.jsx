@@ -8,8 +8,6 @@ import { CartTypes } from '../reducers/cartReducer';
 import customModalStyles from '../styles/modalCustomStyles';
 import './Cart.css';
 
-Modal.setAppElement('#root');
-
 function Select({ options, onChange, initialValue = 0 }) {
   const [value, setValue] = useState(initialValue);
 
@@ -51,6 +49,11 @@ function Cart({ cart, items, dispatch }) {
   const [apiError, setApiError] = useState('');
   const zipRef = useRef();
   const navigate = useNavigate();
+
+  // Set here to allow tests to pass due to async app rendering.
+  useEffect(() => {
+    Modal.setAppElement('#root');
+  }, []);
 
   const subTotal = cart.reduce((acc, item) => {
     const details = items.find((i) => i.id === item.id);
