@@ -153,59 +153,64 @@ function Cart({ cart, items, dispatch }) {
               </tr>
             </thead>
             <tbody>
-              {cart.map((item) => (
-                <tr key={item.id}>
-                  <td>
-                    <div className="quantity">
+              {cart.map((item) => {
+                const availableQuantities = [...Array(17).keys()];
+                return (
+                  <tr key={item.id}>
+                    <td>
+                      <div className="quantity">
+                        <button
+                          type="button"
+                          disabled={item.quantity <= availableQuantities[0]}
+                          onClick={() => {
+                            dispatch({
+                              type: CartTypes.DECREASE,
+                              itemId: item.id,
+                            });
+                          }}
+                        >
+                          -
+                        </button>
+                        <Select
+                          initialValue={item.quantity}
+                          options={availableQuantities}
+                          onChange={(quantity) => {
+                            dispatch({ type: CartTypes.SET_QUANTITY, itemId: item.id, quantity });
+                          }}
+                        />
+                        <button
+                          type="button"
+                          // eslint-disable-next-line max-len
+                          disabled={item.quantity >= availableQuantities[availableQuantities.length - 1]}
+                          onClick={() => {
+                            dispatch({
+                              type: CartTypes.ADD,
+                              itemId: item.id,
+                            });
+                          }}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <td>{items.find((i) => i.id === item.id).title}</td>
+                    <td>{`$${(item.quantity * items.find((i) => i.id === item.id).price).toFixed(2)}`}</td>
+                    <td>
                       <button
                         type="button"
                         onClick={() => {
                           dispatch({
-                            type: CartTypes.DECREASE,
+                            type: CartTypes.REMOVE,
                             itemId: item.id,
                           });
                         }}
                       >
-                        -
+                        Remove
                       </button>
-                      <Select
-                        initialValue={item.quantity}
-                        options={[...Array(15).keys()]}
-                        onChange={(quantity) => {
-                          const type = quantity > 0 ? CartTypes.SET_QUANTITY : CartTypes.REMOVE;
-                          dispatch({ type, itemId: item.id, quantity });
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          dispatch({
-                            type: CartTypes.ADD,
-                            itemId: item.id,
-                          });
-                        }}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </td>
-                  <td>{items.find((i) => i.id === item.id).title}</td>
-                  <td>{`$${(item.quantity * items.find((i) => i.id === item.id).price).toFixed(2)}`}</td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        dispatch({
-                          type: CartTypes.REMOVE,
-                          itemId: item.id,
-                        });
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           {/* eslint-disable-next-line react/jsx-one-expression-per-line  */}
